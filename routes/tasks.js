@@ -1,6 +1,7 @@
 'use strict';
 
 // Tasks routes
+var Joi = require('joi');
 var TasksController = require('../controllers/Tasks');
 
 exports.register = function(plugin, options, next) {
@@ -15,6 +16,18 @@ exports.register = function(plugin, options, next) {
             method: 'GET',
             path: '/tasks',
             handler: tasksController.index
+        },
+        {
+            method: 'POST',
+            path: '/tasks',
+            config: {
+                handler: tasksController.store,
+                validate: {
+                    payload: Joi.object().length(1).keys({
+                        task: Joi.string().required().min(1).max(30)
+                    })
+                }
+            }
         }
     ]);
 
