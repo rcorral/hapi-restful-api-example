@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/rcorral/hapijs-restful-api-example",
   "dependencies": {
+    "good": "^4.0.0",
+    "good-console": "^2.0.1",
     "hapi": "^7.5.2",
   }
 }
