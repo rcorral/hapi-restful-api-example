@@ -5,7 +5,7 @@ var TasksController = require('../controllers/Tasks');
 
 exports.register = function(plugin, options, next) {
     // Setup the controller
-    var tasksController = new TasksController();
+    var tasksController = new TasksController(options.database);
 
     // Binds all methods
     plugin.bind(tasksController);

@@ -1,8 +1,10 @@
 'use strict';
 
+var Database = require('./database');
 var Good = require('good');
 var Hapi = require('hapi');
 
+var database = new Database();
 var server = new Hapi.Server('localhost', 8000);
 
 var plugins = [
@@ -15,7 +17,12 @@ var plugins = [
             }]
         }
     },
-    { plugin: require('./routes/tasks.js') }
+    {
+        plugin: require('./routes/tasks.js'),
+        options: {
+            database: database
+        }
+    }
 ];
 
 server.pack.register(plugins, function (err) {
