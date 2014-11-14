@@ -1,13 +1,20 @@
 'use strict';
 
+// Tasks routes
+var TasksController = require('../controllers/Tasks');
+
 exports.register = function(plugin, options, next) {
+    // Setup the controller
+    var tasksController = new TasksController();
+
+    // Binds all methods
+    plugin.bind(tasksController);
+
     plugin.route([
         {
             method: 'GET',
             path: '/tasks',
-            handler: function (request, reply) {
-                reply('hello world');
-            }
+            handler: tasksController.index
         }
     ]);
 
