@@ -1,4 +1,5 @@
-tasks-hapijs-api-example
-========================
+A Tasks API built using hapi.js
+================================
 
-An example API using hapi.js for keeping a list of tasks
+An example of a Restful API built using [hapi.js](http://hapijs.com/) for keeping a list of tasks.
+
