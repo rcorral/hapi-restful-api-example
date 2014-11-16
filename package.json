@@ -1,8 +1,11 @@
 {
   "name": "hapijs-restful-api-example",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An example of a restful api built using hapi.js",
   "main": "index.js",
+  "keywords": [
+    "hapi", "hapijs", "api", "restful", "example"
+  ],
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/lab --assert should"
   },
