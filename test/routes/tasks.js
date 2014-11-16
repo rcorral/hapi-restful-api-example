@@ -4,6 +4,7 @@ var lab = exports.lab = require('lab').script();
 var describe = lab.describe;
 var it = lab.it;
 var beforeEach = lab.beforeEach;
+var afterEach = lab.afterEach;
 var server = require('../../');
 var db = server.database;
 
@@ -117,6 +118,137 @@ describe('Routes /tasks', function() {
                     response.result[0].should.eql(tasks[2]);
                     response.result[1].should.eql(tasks[3]);
                     response.result[2].should.eql(tasks[4]);
+                    done();
+                });
+            });
+        });
+
+    });
+
+    describe('POST', function() {
+
+        var clear = function(done) {
+            db.clear();
+            done();
+        };
+        beforeEach(clear);
+        afterEach(clear);
+
+        it('fails when there\'s no payload', function(done) {
+            var options = {method: 'POST', url: '/tasks'};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails with an invalid payload', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when there\'s too many properties in the payload', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'a task', something: 'else'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when the task value is empty', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: ''}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when the task property is not set in payload', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {something: 'else'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails whenthe task value is too long', function(done) {
+            var task = 'this is longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+            var options = {method: 'POST', url: '/tasks', payload: {task: task}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('returns 201 HTTP status code', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(201);
+                done();
+            });
+        });
+
+        it('returns an object after creating new task', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                response.result.should.be.an.instanceOf.Object;
+                done();
+            });
+        });
+
+        it('returns an object with id and value properties', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                response.result.should.have.property('id');
+                response.result.should.have.property('value');
+                response.result.value.should.be.exactly('my task');
+                done();
+            });
+        });
+
+        it('ids are 16 characters long', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                response.result.id.length.should.be.exactly(16);
+                done();
+            });
+        });
+
+        it('ids should be hex values', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                /[ABCDEF0-9]{16}/i.test(response.result.id).should.be.ok;
+                done();
+            });
+        });
+
+        it('trims white space', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: '   my task           '}};
+            server.inject(options, function(response) {
+                response.result.value.should.be.exactly('my task');
+                done();
+            });
+        });
+
+        it('doesn\'t allow duplicate tasks', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'task1'}};
+            server.inject(options, function(response) {
+                server.inject(options, function(response) {
+                    response.result.statusCode.should.be.exactly(400);
+                    done();
+                });
+            });
+        });
+
+        it('saves added task', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                var options = {method: 'GET', url: '/tasks'};
+                server.inject(options, function(response) {
+                    response.result[0].value.should.be.eql('my task');
                     done();
                 });
             });

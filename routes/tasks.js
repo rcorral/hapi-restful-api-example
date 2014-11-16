@@ -32,7 +32,7 @@ exports.register = function(plugin, options, next) {
                 handler: tasksController.store,
                 validate: {
                     payload: Joi.object().length(1).keys({
-                        task: Joi.string().required().min(1).max(30)
+                        task: Joi.string().required().min(1).max(60)
                     })
                 }
             }

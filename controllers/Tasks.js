@@ -27,8 +27,7 @@ TasksController.prototype.store = function(request, reply) {
         reply(this.tasksModel.addTask(request.payload.task))
             .created();
     } catch (e) {
-        reply(Boom.badRequest(e.message))
-            .takeover();
+        reply(Boom.badRequest(e.message));
     }
 };
 
