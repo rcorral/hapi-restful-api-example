@@ -1,5 +1,9 @@
 'use strict';
 
+var lab = exports.lab = require('lab').script();
+var describe = lab.describe;
+var it = lab.it;
+var beforeEach = lab.beforeEach;
 var server = require('../../');
 var db = server.database;
 
