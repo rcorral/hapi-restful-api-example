@@ -5,5 +5,42 @@ A Tasks API built using hapi.js
 [![dependency Status](https://david-dm.org/rcorral/hapijs-restful-api-example.svg?style=flat)](https://david-dm.org/rcorral/hapijs-restful-api-example#info=dependencies)
 [![devDependency Status](https://david-dm.org/rcorral/hapijs-restful-api-example/dev-status.svg?style=flat)](https://david-dm.org/rcorral/hapijs-restful-api-example#info=devDependencies)
 
-An example of a Restful API built using [hapi.js](http://hapijs.com/) for keeping a list of tasks.
+An example of a Restful API built using [hapi.js](http://hapijs.com/) for storing a list of tasks.
 
+Install
+-------
+
+`$ npm install`
+
+Run
+---
+
+`$ npm index.js`
+
+Using the API
+-------------
+
+#### Get tasks
+`$ curl -XGET http://localhost:8000/tasks`
+
+#### Get task by id
+`$ curl -XGET http://localhost:8000/tasks/{id}`
+
+#### Add tasks
+`$ curl -XPOST http://localhost:8000/tasks -H 'Content-Type: application/json' -d '{"task": "Play futbol."}'`
+
+#### Update task
+`$ curl -XPUT http://localhost:8000/tasks/{id} -H 'Content-Type: application/json' -d '{"task": "Play soccer."}'`
+
+#### Delete task
+`$ curl -XDELETE http://localhost:8000/tasks/{id}`
+
+Tests
+-----
+
+`$ npm test`
+
+License
+-------
+
+MIT

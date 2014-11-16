@@ -13,6 +13,7 @@ if (process.env.NODE_ENV === 'test') {
     server.database = database;
 }
 
+// Avoids logs to console when running tests
 if (process.env.NODE_ENV !== 'test') {
     plugins.push({
         plugin: Good,

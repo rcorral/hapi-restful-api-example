@@ -1,6 +1,6 @@
 {
   "name": "hapijs-restful-api-example",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An example of a restful api built using hapi.js",
   "main": "index.js",
   "scripts": {
