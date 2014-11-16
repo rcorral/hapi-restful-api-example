@@ -6,9 +6,15 @@ var Hapi = require('hapi');
 
 var database = new Database();
 var server = new Hapi.Server('localhost', 8000);
+var plugins = [];
 
-var plugins = [
-    {
+// Expose database
+if (process.env.NODE_ENV === 'test') {
+    server.database = database;
+}
+
+if (process.env.NODE_ENV !== 'test') {
+    plugins.push({
         plugin: Good,
         options: {
             reporters: [{
@@ -16,19 +22,25 @@ var plugins = [
                 args:[{log: '*', request: '*', error: '*'}]
             }]
         }
-    },
-    {
-        plugin: require('./routes/tasks.js'),
-        options: {
-            database: database
-        }
+    });
+}
+
+// Add routes
+plugins.push({
+    plugin: require('./routes/tasks.js'),
+    options: {
+        database: database
     }
-];
+});
 
 server.pack.register(plugins, function (err) {
     if (err) { throw err; }
 
-    server.start(function () {
-        server.log('info', 'Server running at: ' + server.info.uri);
-    });
+    if (!module.parent) {
+        server.start(function () {
+            server.log('info', 'Server running at: ' + server.info.uri);
+        });
+    }
 });
+
+module.exports = server;

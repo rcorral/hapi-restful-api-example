@@ -7,7 +7,8 @@ function TasksModel(database) {
 };
 
 TasksModel.prototype.getTasks = function(start, limit) {
-    return this.getAllTasks();
+    var tasks = this.getAllTasks();
+    return tasks.slice(start, limit + 1);
 };
 
 TasksModel.prototype.getAllTasks = function(start, limit) {

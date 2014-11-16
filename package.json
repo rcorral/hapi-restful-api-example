@@ -4,7 +4,7 @@
   "description": "An example of a restful api built using hapi.js",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha $(find ./test -name '*.js')"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,9 @@
     "good-console": "^2.0.1",
     "hapi": "^7.5.2",
     "joi": "^4.8.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
   }
 }

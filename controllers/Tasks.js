@@ -16,7 +16,7 @@ TasksController.prototype.index = function(request, reply) {
     };
 
     if (limit == null) {
-        limit = 10
+        limit = start + 9
     };
 
     reply(this.tasksModel.getTasks(start, limit));

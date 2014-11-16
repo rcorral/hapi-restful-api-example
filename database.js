@@ -23,5 +23,10 @@ module.exports = function() {
         return store[key];
     };
 
+    // Used in tests
+    Database.prototype.clear = function() {
+        store = {};
+    };
+
     return new Database();
 };

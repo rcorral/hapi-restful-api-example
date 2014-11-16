@@ -15,7 +15,15 @@ exports.register = function(plugin, options, next) {
         {
             method: 'GET',
             path: '/tasks',
-            handler: tasksController.index
+            config: {
+                handler: tasksController.index,
+                validate: {
+                    query: Joi.object().keys({
+                        start: Joi.number().min(0),
+                        limit: Joi.number().min(1)
+                    })
+                }
+            }
         },
         {
             method: 'POST',
