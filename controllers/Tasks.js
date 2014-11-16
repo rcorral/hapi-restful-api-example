@@ -7,6 +7,7 @@ function TasksController(database) {
     this.tasksModel = new TasksModel(database);
 };
 
+// [GET] /tasks
 TasksController.prototype.index = function(request, reply) {
     var start = request.query.start;
     var limit = request.query.limit;
@@ -22,24 +23,30 @@ TasksController.prototype.index = function(request, reply) {
     reply(this.tasksModel.getTasks(start, limit));
 };
 
+// [GET] /tasks/{id}
 TasksController.prototype.show = function(request, reply) {
     try {
         var id = request.params.id;
+
         reply(this.tasksModel.getTask(id));
     } catch (e) {
         reply(Boom.notFound(e.message));
     }
 };
 
+// [POST] /tasks
 TasksController.prototype.store = function(request, reply) {
     try {
-        reply(this.tasksModel.addTask(request.payload.task))
+        var value = request.payload.task;
+
+        reply(this.tasksModel.addTask(value))
             .created();
     } catch (e) {
         reply(Boom.badRequest(e.message));
     }
 };
 
+// [PUT] /tasks/{id}
 TasksController.prototype.update = function(request, reply) {
     try {
         var id = request.params.id;
@@ -51,9 +58,11 @@ TasksController.prototype.update = function(request, reply) {
     }
 };
 
+// [DELETE] /tasks/{id}
 TasksController.prototype.destroy = function(request, reply) {
     try {
         var id = request.params.id;
+
         this.tasksModel.deleteTask(id);
         reply().code(204);
     } catch (e) {

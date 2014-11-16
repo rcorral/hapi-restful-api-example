@@ -86,7 +86,7 @@ TasksModel.prototype.deleteTask = function(id) {
     for (i = 0, len = tasks.length; i < len; i++) {
         task = tasks[i];
         if (task.id === id) {
-            // Removes element
+            // Removes task
             tasks.splice(i, 1);
             this.db.set('tasks', tasks);
             return;
