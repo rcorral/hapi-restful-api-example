@@ -15,29 +15,13 @@ TasksModel.prototype.getAllTasks = function() {
     return this.db.get('tasks') || [];
 };
 
-TasksModel.prototype.findTaskByValue = function(value) {
+TasksModel.prototype.findTaskByProperty = function(prop, value) {
     var task, i, len;
     var tasks = this.getAllTasks();
 
-    // Check if task already exists
     for (i = 0, len = tasks.length; i < len; i++) {
         task = tasks[i];
-        if (task.value === value) {
-            return task;
-        }
-    }
-
-    return null;
-};
-
-TasksModel.prototype.findTaskByID = function(id) {
-    var task, i, len;
-    var tasks = this.getAllTasks();
-
-    // Check if task already exists
-    for (i = 0, len = tasks.length; i < len; i++) {
-        task = tasks[i];
-        if (task.id === id) {
+        if (task[prop] === value) {
             return task;
         }
     }
@@ -50,7 +34,7 @@ TasksModel.prototype.addTask = function(newTask) {
     newTask = newTask.trim();
 
     // We don't want duplicates
-    if (this.findTaskByValue(newTask)) {
+    if (this.findTaskByProperty('value', newTask)) {
         throw new Error('Task already exists for id: ' + task.id);
     }
 
@@ -71,7 +55,7 @@ TasksModel.prototype.updateTask = function(id, updatedTask) {
     var tasks = this.getAllTasks();
     updatedTask = updatedTask.trim();
 
-    var task = this.findTaskByID(id);
+    var task = this.findTaskByProperty('id', id);
 
     if (!task) {
         throw new Error('Task doesn\'t exists.');
