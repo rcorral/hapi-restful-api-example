@@ -36,6 +36,21 @@ exports.register = function(plugin, options, next) {
                     })
                 }
             }
+        },
+        {
+            method: 'PUT',
+            path: '/tasks/{id}',
+            config: {
+                handler: tasksController.update,
+                validate: {
+                    params: {
+                        id: Joi.string().regex(/[a-zA-Z0-9]{16}/)
+                    },
+                    payload: Joi.object().length(1).keys({
+                        task: Joi.string().required().min(1).max(60)
+                    })
+                }
+            }
         }
     ]);
 

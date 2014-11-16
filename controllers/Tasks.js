@@ -13,11 +13,11 @@ TasksController.prototype.index = function(request, reply) {
 
     if (start == null) {
         start = 0
-    };
+    }
 
     if (limit == null) {
         limit = start + 9
-    };
+    }
 
     reply(this.tasksModel.getTasks(start, limit));
 };
@@ -28,6 +28,17 @@ TasksController.prototype.store = function(request, reply) {
             .created();
     } catch (e) {
         reply(Boom.badRequest(e.message));
+    }
+};
+
+TasksController.prototype.update = function(request, reply) {
+    try {
+        var id = request.params.id;
+        var task = request.payload.task;
+
+        reply(this.tasksModel.updateTask(id, task));
+    } catch (e) {
+        reply(Boom.notFound(e.message));
     }
 };
 

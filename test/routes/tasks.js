@@ -174,8 +174,17 @@ describe('Routes /tasks', function() {
             });
         });
 
-        it('fails whenthe task value is too long', function(done) {
-            var task = 'this is longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+        it('fails when the task value is too long', function(done) {
+            var task = 'this is longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaaaaaa';
+            var options = {method: 'POST', url: '/tasks', payload: {task: task}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('saves with a string that is 60 characters long', function(done) {
+            var task = 'this is not longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaa';
             var options = {method: 'POST', url: '/tasks', payload: {task: task}};
             server.inject(options, function(response) {
                 response.statusCode.should.be.exactly(400);
@@ -251,6 +260,136 @@ describe('Routes /tasks', function() {
                     response.result[0].value.should.be.eql('my task');
                     done();
                 });
+            });
+        });
+
+    });
+
+    describe('PUT', function() {
+        var taskID = null;
+
+        beforeEach(function(done) {
+            db.clear();
+
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                taskID = response.result.id
+                done();
+            });
+        });
+
+        it('validates id in url parameter', function(done) {
+            var options = {method: 'PUT', url: '/tasks/1', payload: {}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when there\'s no payload', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails with an invalid payload', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when there\'s too many properties in the payload', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'a task', something: 'else'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when the task value is empty', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: ''}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when the task property is not set in payload', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {something: 'else'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('fails when the task value is too long', function(done) {
+            var task = 'this is longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaaaaaa';
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: task}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('saves with a string that is 60 characters long', function(done) {
+            var task = 'this is not longer than 60 characters. aaaaaaaaaaaaaaaaaaaaaa';
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: task}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('returns 404 when task isn\'t found', function(done) {
+            var options = {method: 'PUT', url: '/tasks/1234567890ABCDEF', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(404);
+                done();
+            });
+        });
+
+        it('returns a status code of 200 when sucessful', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'my new value'}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(200);
+                done();
+            });
+        });
+
+        it('returns an object', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'my new value'}};
+            server.inject(options, function(response) {
+                response.result.should.be.an.instanceOf.Object;
+                done();
+            });
+        });
+
+        it('returns an object with id and value properties', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'my new value'}};
+            server.inject(options, function(response) {
+                response.result.should.have.property('id');
+                response.result.should.have.property('value');
+                done();
+            });
+        });
+
+        it('returned object\'s id property should be equal to the one sent in url', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'my new value'}};
+            server.inject(options, function(response) {
+                response.result.id.should.be.exactly(taskID);
+                done();
+            });
+        });
+
+        it('updates a task', function(done) {
+            var options = {method: 'PUT', url: '/tasks/' + taskID, payload: {task: 'my new value'}};
+            server.inject(options, function(response) {
+                response.result.value.should.be.exactly('my new value');
+                done();
             });
         });
 
