@@ -22,6 +22,15 @@ TasksController.prototype.index = function(request, reply) {
     reply(this.tasksModel.getTasks(start, limit));
 };
 
+TasksController.prototype.show = function(request, reply) {
+    try {
+        var id = request.params.id;
+        reply(this.tasksModel.getTask(id));
+    } catch (e) {
+        reply(Boom.notFound(e.message));
+    }
+};
+
 TasksController.prototype.store = function(request, reply) {
     try {
         reply(this.tasksModel.addTask(request.payload.task))
@@ -45,7 +54,7 @@ TasksController.prototype.update = function(request, reply) {
 TasksController.prototype.destroy = function(request, reply) {
     try {
         var id = request.params.id;
-        this.tasksModel.deleteTask(id)
+        this.tasksModel.deleteTask(id);
         reply().code(204);
     } catch (e) {
         reply(Boom.notFound(e.message));

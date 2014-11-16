@@ -10,7 +10,7 @@ var db = server.database;
 
 describe('Routes /tasks', function() {
 
-    describe('GET', function() {
+    describe('GET /tasks', function() {
 
         beforeEach(function(done) {
             db.clear();
@@ -125,7 +125,41 @@ describe('Routes /tasks', function() {
 
     });
 
-    describe('POST', function() {
+    describe('GET /tasks/{id}', function() {
+
+        it('validates id in url parameter', function(done) {
+            var options = {method: 'GET', url: '/tasks/1'};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('returns 404 when task isn\'t found', function(done) {
+            var options = {method: 'GET', url: '/tasks/1234567890ABCDEF'};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(404);
+                done();
+            });
+        });
+
+        it('returns requested task', function(done) {
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                var taskID = response.result.id;
+                var options = {method: 'GET', url: '/tasks/' + taskID};
+                server.inject(options, function(response) {
+                    response.result.should.be.an.instanceOf.Object;
+                    response.result.id.should.be.exactly(taskID);
+                    response.result.value.should.be.exactly('my task');
+                    done();
+                });
+            });
+        });
+
+    });
+
+    describe('POST /tasks', function() {
 
         var clear = function(done) {
             db.clear();
@@ -265,7 +299,7 @@ describe('Routes /tasks', function() {
 
     });
 
-    describe('PUT', function() {
+    describe('PUT /tasks/{id}', function() {
         var taskID = null;
 
         beforeEach(function(done) {
@@ -395,7 +429,7 @@ describe('Routes /tasks', function() {
 
     });
 
-    describe('DELETE', function() {
+    describe('DELETE /tasks/{id}', function() {
         var taskID = null;
 
         beforeEach(function(done) {
@@ -409,7 +443,7 @@ describe('Routes /tasks', function() {
         });
 
         it('validates id in url parameter', function(done) {
-            var options = {method: 'DELETE', url: '/tasks/1', payload: {}};
+            var options = {method: 'DELETE', url: '/tasks/1'};
             server.inject(options, function(response) {
                 response.statusCode.should.be.exactly(400);
                 done();

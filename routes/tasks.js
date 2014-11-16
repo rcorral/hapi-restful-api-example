@@ -29,6 +29,18 @@ exports.register = function(plugin, options, next) {
             }
         },
         {
+            method: 'GET',
+            path: '/tasks/{id}',
+            config: {
+                handler: tasksController.show,
+                validate: {
+                    params: {
+                        id: Joi.string().regex(/[a-zA-Z0-9]{16}/)
+                    }
+                }
+            }
+        },
+        {
             method: 'POST',
             path: '/tasks',
             config: {

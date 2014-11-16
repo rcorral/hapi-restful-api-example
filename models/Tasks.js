@@ -6,11 +6,6 @@ function TasksModel(database) {
     this.db = database;
 };
 
-TasksModel.prototype.getTasks = function(start, limit) {
-    var tasks = this.getAllTasks();
-    return tasks.slice(start, limit + 1);
-};
-
 TasksModel.prototype.getAllTasks = function() {
     return this.db.get('tasks') || [];
 };
@@ -27,6 +22,21 @@ TasksModel.prototype.findTaskByProperty = function(prop, value) {
     }
 
     return null;
+};
+
+TasksModel.prototype.getTasks = function(start, limit) {
+    var tasks = this.getAllTasks();
+    return tasks.slice(start, limit + 1);
+};
+
+TasksModel.prototype.getTask = function(id) {
+    var task = this.findTaskByProperty('id', id);
+
+    if (!task) {
+        throw new Error('Task doesn\'t exists.');
+    }
+
+    return task;
 };
 
 TasksModel.prototype.addTask = function(newTask) {
