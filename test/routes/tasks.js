@@ -395,4 +395,74 @@ describe('Routes /tasks', function() {
 
     });
 
+    describe('DELETE', function() {
+        var taskID = null;
+
+        beforeEach(function(done) {
+            db.clear();
+
+            var options = {method: 'POST', url: '/tasks', payload: {task: 'my task'}};
+            server.inject(options, function(response) {
+                taskID = response.result.id
+                done();
+            });
+        });
+
+        it('validates id in url parameter', function(done) {
+            var options = {method: 'DELETE', url: '/tasks/1', payload: {}};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(400);
+                done();
+            });
+        });
+
+        it('returns 404 when task isn\'t found', function(done) {
+            var options = {method: 'DELETE', url: '/tasks/1234567890ABCDEF'};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(404);
+                done();
+            });
+        });
+
+        it('returns a status code of 200 when sucessful', function(done) {
+            var options = {method: 'DELETE', url: '/tasks/' + taskID};
+            server.inject(options, function(response) {
+                response.statusCode.should.be.exactly(204);
+                done();
+            });
+        });
+
+        it('response should be empty when succesfull', function(done) {
+            var options = {method: 'DELETE', url: '/tasks/' + taskID};
+            server.inject(options, function(response) {
+                (response.result === null).should.be.true;
+                done();
+            });
+        });
+
+        it('should delete task', function(done) {
+            db.clear();
+
+            // Create 3 tasks
+            server.inject({method: 'POST', url: '/tasks', payload: {task: 'my task'}}, function(response) {
+                server.inject({method: 'POST', url: '/tasks', payload: {task: 'my task1'}}, function(response) {
+                    var taskID = response.result.id;
+                    server.inject({method: 'POST', url: '/tasks', payload: {task: 'my task2'}}, function(response) {
+                        // Delete one
+                        server.inject({method: 'DELETE', url: '/tasks/' + taskID}, function(response) {
+                            // Check deletion
+                            server.inject({method: 'GET', url: '/tasks'}, function(response) {
+                                response.result.length.should.be.exactly(2);
+                                response.result[0].value.should.be.exactly('my task');
+                                response.result[1].value.should.be.exactly('my task2');
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+    });
+
 });

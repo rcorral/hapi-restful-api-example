@@ -52,7 +52,6 @@ TasksModel.prototype.addTask = function(newTask) {
 };
 
 TasksModel.prototype.updateTask = function(id, updatedTask) {
-    var tasks = this.getAllTasks();
     updatedTask = updatedTask.trim();
 
     var task = this.findTaskByProperty('id', id);
@@ -64,6 +63,25 @@ TasksModel.prototype.updateTask = function(id, updatedTask) {
     task.value = updatedTask;
 
     return task;
+};
+
+TasksModel.prototype.deleteTask = function(id) {
+    if (!this.findTaskByProperty('id', id)) {
+        throw new Error('Task doesn\'t exists.');
+    }
+
+    var task, i, len;
+    var tasks = this.getAllTasks();
+
+    for (i = 0, len = tasks.length; i < len; i++) {
+        task = tasks[i];
+        if (task.id === id) {
+            // Removes element
+            tasks.splice(i, 1);
+            this.db.set('tasks', tasks);
+            return;
+        }
+    }
 };
 
 module.exports = TasksModel;

@@ -9,8 +9,11 @@ exports.register = function(plugin, options, next) {
     var tasksController = new TasksController(options.database);
 
     // Binds all methods
+    // Similar to doing `tasksController.index.bind(tasksController);`
+    // When declaring handlers
     plugin.bind(tasksController);
 
+    // Declare routes
     plugin.route([
         {
             method: 'GET',
@@ -49,6 +52,18 @@ exports.register = function(plugin, options, next) {
                     payload: Joi.object().length(1).keys({
                         task: Joi.string().required().min(1).max(60)
                     })
+                }
+            }
+        },
+        {
+            method: 'DELETE',
+            path: '/tasks/{id}',
+            config: {
+                handler: tasksController.destroy,
+                validate: {
+                    params: {
+                        id: Joi.string().regex(/[a-zA-Z0-9]{16}/)
+                    }
                 }
             }
         }

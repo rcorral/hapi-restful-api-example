@@ -42,4 +42,14 @@ TasksController.prototype.update = function(request, reply) {
     }
 };
 
+TasksController.prototype.destroy = function(request, reply) {
+    try {
+        var id = request.params.id;
+        this.tasksModel.deleteTask(id)
+        reply().code(204);
+    } catch (e) {
+        reply(Boom.notFound(e.message));
+    }
+};
+
 module.exports = TasksController;
