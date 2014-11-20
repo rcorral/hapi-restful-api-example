@@ -85,6 +85,6 @@ exports.register = function(plugin, options, next) {
 }
 
 exports.register.attributes = {
-    name: 'tasks-route',
+    name: 'routes-tasks',
     version: '1.0.0'
 };
