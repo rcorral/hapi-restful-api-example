@@ -4,17 +4,17 @@
 var Joi = require('joi');
 var TasksController = require('../controllers/Tasks');
 
-exports.register = function(plugin, options, next) {
+exports.register = function(server, options, next) {
     // Setup the controller
     var tasksController = new TasksController(options.database);
 
     // Binds all methods
-    // Similar to doing `tasksController.index.bind(tasksController);`
-    // When declaring handlers
-    plugin.bind(tasksController);
+    // similar to doing `tasksController.index.bind(tasksController);`
+    // when declaring handlers
+    server.bind(tasksController);
 
     // Declare routes
-    plugin.route([
+    server.route([
         {
             method: 'GET',
             path: '/tasks',
@@ -86,5 +86,5 @@ exports.register = function(plugin, options, next) {
 
 exports.register.attributes = {
     name: 'routes-tasks',
-    version: '1.0.0'
+    version: '1.0.1'
 };

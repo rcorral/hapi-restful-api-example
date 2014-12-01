@@ -25,9 +25,7 @@
   "homepage": "https://github.com/rcorral/hapi-restful-api-example",
   "dependencies": {
     "boom": "^2.6.0",
-    "good": "^4.0.0",
-    "good-console": "^2.0.1",
-    "hapi": "^7.5.2",
+    "hapi": "git://github.com/hapijs/hapi.git#v8.0.0-rc5",
     "joi": "^5.0.1"
   },
   "devDependencies": {
