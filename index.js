@@ -11,6 +11,12 @@ if (process.env.NODE_ENV === 'test') {
     server.database = database;
 }
 
+// Create server
+server.connection({
+    host: 'localhost',
+    port: 8000
+});
+
 // Add routes
 var plugins = [
     {
@@ -20,11 +26,6 @@ var plugins = [
         }
     }
 ];
-
-server.connection({
-    host: 'localhost',
-    port: 8000
-});
 
 server.register(plugins, function (err) {
     if (err) { throw err; }
