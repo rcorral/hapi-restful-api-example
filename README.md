@@ -5,7 +5,8 @@ A Tasks API built using hapi v8.0
 [![dependency Status](https://david-dm.org/rcorral/hapi-restful-api-example.svg?style=flat)](https://david-dm.org/rcorral/hapi-restful-api-example#info=dependencies)
 [![devDependency Status](https://david-dm.org/rcorral/hapi-restful-api-example/dev-status.svg?style=flat)](https://david-dm.org/rcorral/hapi-restful-api-example#info=devDependencies)
 
-An example of a Restful API built using [hapi.js](http://hapijs.com/) v8.0 for storing a list of tasks.
+An example of a Restful API built using [hapi.js](http://hapijs.com/) v8.0 for storing a list of tasks.  
+Check out the [demo](https://github.com/rcorral/hapi-restful-api-example/tree/deployment#demo).
 
 Install
 -------
