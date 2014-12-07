@@ -34,6 +34,17 @@ server.register(plugins, function (err) {
         server.start(function(err) {
             if (err) { throw err; }
 
+            // Load some data
+            var datas = [
+                'Learn to say the alphabet backwards.',
+                'Program repetitive tasks.',
+                'Write a tetris clone.',
+                'Play with cat before bed time.'
+            ];
+            for (var i = datas.length - 1; i >= 0; i--) {
+                server.inject({method: 'POST', url: '/tasks', payload: {task: datas[i]}}, function(){});
+            };
+
             server.log('info', 'Server running at: ' + server.info.uri);
         });
     }
