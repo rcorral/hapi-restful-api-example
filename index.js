@@ -13,8 +13,8 @@ if (process.env.NODE_ENV === 'test') {
 
 // Create server
 server.connection({
-    host: 'localhost',
-    port: 8000
+    host: '0.0.0.0',
+    port: process.env.PORT || 8000
 });
 
 // Add routes
