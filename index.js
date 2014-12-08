@@ -41,7 +41,7 @@ server.register(plugins, function (err) {
                 'Write a tetris clone.',
                 'Play with cat before bed time.'
             ];
-            for (var i = datas.length - 1; i >= 0; i--) {
+            for (var i = 0; i < datas.length; i++) {
                 server.inject({method: 'POST', url: '/tasks', payload: {task: datas[i]}}, function(){});
             };
 

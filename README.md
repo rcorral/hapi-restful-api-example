@@ -8,7 +8,7 @@ Using the demo
 --------------
 
 Demo url: [https://hapi-restful-api-example.herokuapp.com/tasks](https://hapi-restful-api-example.herokuapp.com/tasks)  
-See below for the different requests types you can play with.
+See below for the different requests you can play with.
 
 #### Get tasks
 ```
