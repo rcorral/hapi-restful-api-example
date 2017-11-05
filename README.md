@@ -18,7 +18,7 @@ Install
 Run
 ---
 
-`$ npm index.js`
+`$ node index.js`
 
 Using the API
 -------------
